@@ -8,7 +8,7 @@ using namespace std::chrono;
 bool insecureCheck(const string &input, const string &correct) {
     for (size_t i = 0; i < correct.length(); i++) {
         if (input[i] != correct[i]) {
-            return false; // Early exit leads to timing leak
+            return false; // Timing leak occurs here
         }
     }
     return true;
