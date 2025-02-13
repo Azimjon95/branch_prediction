@@ -5,11 +5,14 @@
 ```
 BranchPrediction-BestPractices/
 ├── Java/
-│   ├── BranchPredictionExample.java
+│   ├── branch_prediction.java
+│   ├── timing_leak.java
 ├── PHP/
 │   ├── branch_prediction.php
+│   ├── timing_leak.php
 ├── C/
 │   ├── branch_prediction.c
+│   ├── timing_leak.c
 ├── Assembly/
 │   ├── branch_prediction.asm
 ├── README.md
@@ -86,7 +89,55 @@ Spectre tricks the CPU into executing **speculative instructions** beyond normal
 - Prefer **data-independent execution times** in cryptographic code.
 
 ---
+## 🛡️ Secure Check Explanation
 
+### **Why Secure Check Matters**
+Insecure comparisons leak execution time information, allowing attackers to infer secret values. **Secure check methods** prevent timing-based attacks by ensuring execution time remains constant regardless of input.
+
+### **How Secure Check Works**
+- Uses **bitwise XOR (`^`)** instead of conditional branching.
+- **Avoids early exits**, making execution time **consistent**.
+- Prevents **side-channel timing attacks**.
+
+### **Secure Implementation**
+#### **Java Secure Check**
+```java
+public static boolean secureCheck(String input, String correct) {
+    int diff = 0;
+    for (int i = 0; i < correct.length(); i++) {
+        diff |= input.charAt(i) ^ correct.charAt(i);
+    }
+    return diff == 0;
+}
+```
+
+#### **PHP Secure Check**
+```php
+function secureCheck($input, $correct) {
+    $diff = 0;
+    $len = strlen($correct);
+    
+    for ($i = 0; $i < $len; $i++) {
+        $diff |= ord($input[$i]) ^ ord($correct[$i]);
+    }
+    
+    return $diff === 0;
+}
+```
+
+#### **C Secure Check**
+```c
+int secureCheck(const char *input, const char *correct) {
+    int diff = 0;
+    size_t len = strlen(correct);
+    
+    for (size_t i = 0; i < len; i++) {
+        diff |= input[i] ^ correct[i];  // No branching
+    }
+    
+    return diff == 0;
+}
+```
 ## ✅ Best Practices to Avoid Exploits
 
 1. **Minimize Unpredictable Branching:** Structure conditional checks so they are predictable whenever possible.
