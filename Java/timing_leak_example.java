@@ -3,7 +3,7 @@ public class TimingLeakExample {
         // Bad case: Branching based on secret value
         for (int i = 0; i < correct.length(); i++) {
             if (input.charAt(i) != correct.charAt(i)) {
-                return false; // Timing leak happens here
+                return false; // Timing leak occurs here
             }
         }
         return true;
